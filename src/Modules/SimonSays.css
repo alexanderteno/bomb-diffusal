@@ -1,0 +1,11 @@
+.simon-says {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.simon-says table td, .simon-says table th {
+    border: 1px solid black;
+    padding: 5px 10px;
+}

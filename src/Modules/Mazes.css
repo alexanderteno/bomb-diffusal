@@ -1,0 +1,35 @@
+.mazes table {
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+.mazes table td {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 6px;
+    font-weight: bold;
+}
+
+.mazes table td.calibration-point {
+    box-sizing: border-box;
+    font-size: 30px;
+    color: green;
+}
+
+.mazes table td.top {
+    border-top: 1px solid black;
+}
+
+.mazes table td.right {
+    border-right: 1px solid black;
+}
+
+.mazes table td.bottom {
+    border-bottom: 1 px solid black;
+}
+
+.mazes table td.left {
+    border-left: 1px solid black;
+}

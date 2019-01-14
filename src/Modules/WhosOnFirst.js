@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import HomeButton from '../HomeButton/HomeButton';
 import Question from '../Question/Question';
+import { Button } from '@material-ui/core';
 
 const TOP_LEFT = 'top-left';
 const MIDDLE_LEFT = 'middle-left';
@@ -94,11 +95,17 @@ const SightTable = ({ display }) => (
     </table>
 )
 
+const defaultState = {
+    display: undefined,
+    label: undefined,
+};
+
 class WhosOnFirst extends Component {
 
-    state = {
-        display: undefined,
-        label: undefined,
+    state = defaultState;
+
+    reset = () => {
+        this.setState(defaultState);
     }
 
     setDisplay = (display) => {
@@ -114,7 +121,7 @@ class WhosOnFirst extends Component {
             <div className="header whos-on-first">
                 <h1><HomeButton /> On the Subject of Who's on First</h1>
                 <Question
-                    condition={true}
+                    condition={this.state.display === undefined}
                     question="What is on the display?"
                     options={Object.keys(DISPLAY).map((display) => ({ label: display, value: display }))}
                     onChoice={this.setDisplay}
@@ -124,7 +131,7 @@ class WhosOnFirst extends Component {
                     this.state.display ? (<SightTable display={this.state.display} />) : null
                 }
                 <Question
-                    condition={true}
+                    condition={this.state.display !== undefined && this.state.label === undefined}
                     question="What is on the label?"
                     options={Object.keys(LABELS).map((label) => ({ label: label, value: label }))}
                     onChoice={this.setLabel}
@@ -139,6 +146,7 @@ class WhosOnFirst extends Component {
                         </div>
                     ) : null
                 }
+                <Button onClick={this.reset} color="primary" variant="outlined">Reset</Button>
             </div>
         )
     }

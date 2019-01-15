@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
-import Question from '../Question/Question';
-import './SimonSays.css';
+import Question from '../../Question/Question';
+import './SimonSays.scss';
+import BaseModule from '../../BaseModule/BaseModule';
+
+import simonSays from '../images/on-the-subject-of-simon-says.svg';
 
 const VOWEL = 'vowel';
 const NO_VOWEL = 'no-vowel';
@@ -19,11 +21,17 @@ const DIRECTIONS = {
     }
 }
 
+const defaultState = {
+    instruction: undefined,
+    strikes: undefined,
+}
+
 class SimonSays extends Component {
 
-    state = {
-        instruction: undefined,
-        strikes: undefined,
+    state = defaultState;
+
+    reset = () => {
+        this.setState(defaultState);
     }
 
     setStrikes = (strikes) => {
@@ -35,26 +43,24 @@ class SimonSays extends Component {
     }
 
     render() {
-
-
-
         return (
-            <div className="header simon-says">
-                <h1><HomeButton /> On the Subject of Simon Says</h1>
-                <Question
-                    condition={this.state.instruction === undefined}
-                    question="Does the serial number contains a vowel?"
-                    options={[{ label: "Yes", instruction: VOWEL }, { label: "No", instruction: NO_VOWEL }]}
-                    onChoice={this.setStage}
-                    onInstruction={this.setInstruction}
-                />
-                <Question
-                    condition={this.state.strikes === undefined}
-                    question="How many strikes?"
-                    options={[{ label: "No Strikes", value: 0 }, { label: "1 Strike", value: 1 }, { label: "2 Strikes", value: 2 }]}
-                    onChoice={this.setStrikes}
-                    onInstruction={this.setInstruction}
-                />
+            <BaseModule title="Simon Says" thumbnail={simonSays} reset={this.reset}>
+                <div className="questions-container">
+                    <Question
+                        condition={this.state.instruction === undefined}
+                        question="Does the serial number contains a vowel?"
+                        options={[{ label: "Yes", instruction: VOWEL }, { label: "No", instruction: NO_VOWEL }]}
+                        onChoice={this.setStage}
+                        onInstruction={this.setInstruction}
+                    />
+                    <Question
+                        condition={this.state.strikes === undefined}
+                        question="How many strikes?"
+                        options={[{ label: "No Strikes", value: 0 }, { label: "1 Strike", value: 1 }, { label: "2 Strikes", value: 2 }]}
+                        onChoice={this.setStrikes}
+                        onInstruction={this.setInstruction}
+                    />
+                </div>
                 {
                     this.state.strikes !== undefined && this.state.instruction !== undefined ?
                         (
@@ -79,7 +85,7 @@ class SimonSays extends Component {
 
                         ) : null
                 }
-            </div>
+            </BaseModule>
         )
     }
 }

@@ -135,8 +135,6 @@ class Knobs extends Component {
             });
         });
 
-        console.log({ positions: possibleSettings.map(({ position }) => position) });
-
         const definiteSetting = possibleSettings.reduce((acc, { _, position }) => {
             if (acc === undefined) {
                 return position;

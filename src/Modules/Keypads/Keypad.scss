@@ -1,0 +1,10 @@
+.keypads .options {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    .option {
+        grid-column-end: span 1;
+        box-shadow: 2px 2px 4px rgba(black, 0.35);
+    }
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
-import './Keypad.css';
+import './Keypad.scss';
+
+import keypads from '../images/on-the-subject-of-keypads.svg'
 
 import at from './symbols/a-t.png';
 import ae from './symbols/ae.png';
@@ -28,6 +29,7 @@ import strikeThroughEquals from './symbols/strike-through-equals.png';
 import swirlO from './symbols/swirl-o.png';
 import tb from './symbols/t-b.png';
 import upsideQuestionMark from './symbols/upside-question-mark.png';
+import BaseModule from '../../BaseModule/BaseModule';
 
 const SETS = [
     [stickFigure, at, lambda, squiggleZ, hy, hWithTail, backwardsC],
@@ -48,10 +50,16 @@ const getUniqueSymbolsFromSets = (sets) => {
     return Object.values(elementSet);
 }
 
+const defaultState = {
+    symbols: [],
+};
+
 class Keypads extends Component {
 
-    state = {
-        symbols: [],
+    state = defaultState;
+
+    reset = () => {
+        this.setState(defaultState);
     }
 
     addSymbol = (symbol) => {
@@ -75,8 +83,7 @@ class Keypads extends Component {
         });
 
         return (
-            <div className="header keypads">
-                <h1><HomeButton /> On the Subject of Keypads</h1>
+            <BaseModule title="Keypads" thumbnail={keypads} reset={this.reset}>
                 {
                     this.state.symbols.length < 4 ? (
                         <div className="query-mode">
@@ -88,17 +95,11 @@ class Keypads extends Component {
                                     ))
                                 }
                             </div>
-                            <h2>Selections</h2>
-                            <div className="selections">
-                                {
-                                    this.state.symbols.map((symbol) => (
-                                        <img className="option" src={symbol} alt="symbol" key={symbol}></img>
-                                    ))
-                                }
-                            </div>
                         </div>
                     ) : (
                             <div className="solution">
+                            <h2>Solution</h2>
+                            <p>Read from left to right.</p>
                                 {
                                     relevantSets.find(() => true).filter((symbol) => {
                                         return this.state.symbols.includes(symbol);
@@ -107,7 +108,7 @@ class Keypads extends Component {
                             </div>
                         )
                 }
-            </div>
+            </BaseModule>
         );
     }
 

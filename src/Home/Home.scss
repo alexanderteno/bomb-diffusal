@@ -1,0 +1,16 @@
+.home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .module-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-column-gap: 20px;
+        .module-link {
+            grid-column-end: span 1;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    }
+}

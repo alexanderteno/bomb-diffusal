@@ -100,7 +100,7 @@ const OPTIONS = {
     up: [true, false],
     down: [false, true],
     both: [true, true],
-    neither: [false, false],
+    none: [false, false],
 };
 
 const LightCell = ({ position, lit, row }) => (
@@ -178,16 +178,16 @@ class Knobs extends Component {
                             <h2>Select LED configuration</h2>
                             <div className="leds">
                                 {
-                                    ['up', 'down', 'both', 'neither'].map((ledOption) => {
+                                    ['up', 'down', 'both', 'none'].map((ledOption) => {
                                         return [0, 1, 2, 3, 4, 5].map((columnIndex) => (
                                             <Button
                                                 key={columnIndex}
                                                 className="cell"
-                                                variant="outlined"
                                                 onClick={() => { this.setColumn(columnIndex, ledOption) }}
-                                                style={{ fontSize: 12 }}
-                                            >
-                                                {ledOption}
+                                                variant="outlined"
+                                                style={{ minWidth: 'unset' }}
+                                            >{
+                                                    ledOption[0]}
                                             </Button>
                                         ))
                                     })

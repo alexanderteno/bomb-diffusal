@@ -77,8 +77,7 @@ class ComplicatedWires extends Component {
             this.setState((prevState) => ({
                 ...prevState,
                 [feature]: !prevState[feature],
-            }))
-            console.log(feature)
+            }));
         }
     }
 

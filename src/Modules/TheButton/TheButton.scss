@@ -1,10 +1,16 @@
 .the-button {
     .sections {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
         .section {
-            flex: 1 1 0;
+            width: 250px;
+            grid-column-end: span 1;
+            &.word {
+                grid-column-start: 1;
+            }
+            &.color {
+                grid-column-start: 2;
+            }
             .words-container,
             .colors-container {
                 padding: 10px;
@@ -21,8 +27,8 @@
     .sample-button {
         border-radius: 50%;
         border: 1px solid rgba(black, 0.5);
-        width: 200px;
-        height: 200px;
+        width: 150px;
+        height: 150px;
         display: inline-flex;
         flex-direction: column;
         align-items: center;
@@ -30,5 +36,21 @@
         text-transform: uppercase;
         font-size: 24px;
         font-weight: bold;
+    }
+}
+
+@media screen and (min-width: 411px) {
+    .the-button {
+        .sections {
+            grid-template-columns: 1fr;
+            .section {
+                &.word {
+                    grid-column-start: unset;
+                }
+                &.color {
+                    grid-column-start: unset;
+                }
+            }
+        }
     }
 }

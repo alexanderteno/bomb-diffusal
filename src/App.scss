@@ -39,3 +39,30 @@
         height: inherit;
     }
 }
+
+@media screen and (max-width: 411px) {
+    h1 {
+        font-size: 18px;
+    }
+    h2 {
+        font-size: 16px;
+    }
+    h3 {
+        font-size: 14px;
+    }
+    div,
+    p,
+    input,
+    span {
+        font-size: 12px;
+    }
+    .bomb-information {
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 412px) {
+    .small-screen {
+        display: none !important;
+    }
+}

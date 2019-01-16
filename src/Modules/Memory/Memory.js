@@ -92,7 +92,6 @@ class Memory extends Component {
         const step = DISPLAY[this.state.stage][display];
         if (step['checkState']) {
             const { stage, info } = step['checkState'];
-            console.log({ results: this.state.results, info, stage })
             const value = this.state.results[stage - 1][info]
             const message = info === 'position' ?
                 `Press the button in the ${POSITION_WORDS[value]} position` :

@@ -42,8 +42,15 @@ class BaseModule extends Component {
     }
 
     render() {
+
+        const classes = ['base-module']
+        classes.push(processTitle(this.props.title))
+        if (this.props.sticky) {
+            classes.push('sticky');
+        }
+
         return (
-            <div className={`base-module ${processTitle(this.props.title)}${this.props.sticky ? ' sticky' : ''}`}>
+            <div className={classes.join(' ')}>
                 <div className="header">
                     {
                         !this.props.sticky && (<HomeButton buttonRef={(buttonRef) => { this.buttonRef = buttonRef }} />)

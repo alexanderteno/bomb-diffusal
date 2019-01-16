@@ -1,0 +1,39 @@
+.whos-on-first {
+    .display-options,
+    .label-options,
+    .response-options {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-column-gap: 15px;
+        grid-row-gap: 15px;
+        .display-word,
+        .label-word {
+            grid-column-end: span 1;
+        }
+    }
+    .sight-table {
+        border: 1px solid black;
+        width: 110px;
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr;
+        .display,
+        .position {
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .display {
+            font-size: 18px;
+            font-weight: bold;
+            grid-column: 1 / span 2;
+            background-color: black;
+            color: white;
+        }
+        .position {
+            grid-column-end: span 1;
+            border: 1px solid black;
+        }
+    }
+}

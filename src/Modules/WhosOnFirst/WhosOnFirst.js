@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
-import Question from '../Question/Question';
-import { Button } from '@material-ui/core';
+import { Button, Icon } from '@material-ui/core';
+import BaseModule from '../../BaseModule/BaseModule';
+import './WhosOnFirst.scss';
+
+import whosOnFirst from '../images/on-the-subject-of-whos-on-first.svg';
+
 
 const TOP_LEFT = 'top-left';
+const TOP_RIGHT = 'top-right';
 const MIDDLE_LEFT = 'middle-left';
 const BOTTOM_LEFT = 'bottom-left';
-const TOP_RIGHT = 'top-right';
+
 const MIDDLE_RIGHT = 'middle-right';
 const BOTTOM_RIGHT = 'bottom-right';
 
+const POSITION_INDEX = {
+    [TOP_LEFT]: 0,
+    [TOP_RIGHT]: 1,
+    [MIDDLE_LEFT]: 2,
+    [MIDDLE_RIGHT]: 3,
+    [BOTTOM_LEFT]: 4,
+    [BOTTOM_RIGHT]: 5,
+};
+
 const DISPLAY = {
-    '_': BOTTOM_LEFT,
+    '': BOTTOM_LEFT,
     'BLANK': MIDDLE_RIGHT,
     'C': TOP_RIGHT,
     'CEE': BOTTOM_RIGHT,
@@ -72,28 +85,21 @@ const LABELS = {
     'YOUR': 'UH UH, YOU ARE, UH HUH, YOUR, NEXT, UR, SURE, U, YOU\'RE, YOU, WHAT?, HOLD, LIKE, DONE',
 }
 
-const CELL_STYLE = { border: '1px solid black', width: 60, height: 30 };
-
-const SightTable = ({ display }) => (
-    <table style={{ border: '1px solid black' }}>
-        <thead>
-            <tr>
-                <th colSpan="2">{display}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style={CELL_STYLE}>{DISPLAY[display] === TOP_LEFT ? '@' : null}</td><td style={CELL_STYLE}>{DISPLAY[display] === TOP_RIGHT ? '@' : null}</td>
-            </tr>
-            <tr>
-                <td style={CELL_STYLE}>{DISPLAY[display] === MIDDLE_LEFT ? '@' : null}</td><td style={CELL_STYLE}>{DISPLAY[display] === MIDDLE_RIGHT ? '@' : null}</td>
-            </tr>
-            <tr>
-                <td style={CELL_STYLE}>{DISPLAY[display] === BOTTOM_LEFT ? '@' : null}</td><td style={CELL_STYLE}>{DISPLAY[display] === BOTTOM_RIGHT ? '@' : null}</td>
-            </tr>
-        </tbody>
-    </table>
-)
+const SightTable = ({ display }) => {
+    const sightIndex = POSITION_INDEX[DISPLAY[display]];
+    return (
+        <div className="sight-table">
+            <div className="display">{display}</div>
+            {
+                [0, 1, 2, 3, 4, 5].map((index) => (
+                    <div key={index} className={`position${sightIndex === index ? ' active' : ''}`}>
+                        {sightIndex === index ? (<Icon>remove_red_eye</Icon>) : null}
+                    </div>
+                ))
+            }
+        </div>
+    )
+}
 
 const defaultState = {
     display: undefined,
@@ -118,36 +124,66 @@ class WhosOnFirst extends Component {
 
     render() {
         return (
-            <div className="header whos-on-first">
-                <h1><HomeButton /> On the Subject of Who's on First</h1>
-                <Question
-                    condition={this.state.display === undefined}
-                    question="What is on the display?"
-                    options={Object.keys(DISPLAY).map((display) => ({ label: display, value: display }))}
-                    onChoice={this.setDisplay}
-                    onInstruction={undefined}
-                />
+            <BaseModule title="Who's On First" reset={this.reset} thumbnail={whosOnFirst}>
                 {
-                    this.state.display ? (<SightTable display={this.state.display} />) : null
-                }
-                <Question
-                    condition={this.state.display !== undefined && this.state.label === undefined}
-                    question="What is on the label?"
-                    options={Object.keys(LABELS).map((label) => ({ label: label, value: label }))}
-                    onChoice={this.setLabel}
-                    onInstruction={undefined}
-                />
-                {
-                    this.state.label ? (
-                        <div className="label-readout">
-                            {
-                                LABELS[this.state.label]
-                            }
+                    (this.state.display === undefined) && (
+                        <div className="display">
+                            <h2>What is on the display?</h2>
+                            <div className="display-options">
+                                {
+                                    Object.keys(DISPLAY).map((displayWord) => (
+                                        <Button
+                                            key={displayWord}
+                                            variant="outlined"
+                                            className="display-word"
+                                            onClick={() => { this.setDisplay(displayWord) }}
+                                        >
+                                            {displayWord}
+                                        </Button>
+                                    ))
+                                }
+                            </div>
                         </div>
-                    ) : null
+                    )
                 }
-                <Button onClick={this.reset} color="primary" variant="outlined">Reset</Button>
-            </div>
+                {
+                    (this.state.display !== undefined && this.state.label === undefined) && (
+                        <div className="display-response">
+                            <h2>Display Response</h2>
+                            <SightTable display={this.state.display} />
+                            <h2>What is on the label?</h2>
+                            <div className="label-options">
+                                {
+                                    Object.keys(LABELS).map((labelWord) => (
+                                        <Button
+                                            key={labelWord}
+                                            variant="outlined"
+                                            className="label-word"
+                                            onClick={() => { this.setLabel(labelWord) }}
+                                        >
+                                            {labelWord}
+                                        </Button>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    )
+                }
+                {
+                    (this.state.display !== undefined && this.state.label !== undefined) && (
+                        <div className="label-response">
+                            <h2>Label Response</h2>
+                            <div className="response-options">
+                                {
+                                    LABELS[this.state.label].split(/,\s/).map((word) => (
+                                        <Button key={word} variant="outlined">{word}</Button>
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    )
+                }
+            </BaseModule>
         )
     }
 }

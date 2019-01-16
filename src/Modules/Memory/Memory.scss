@@ -1,0 +1,10 @@
+.memory {
+    .buttons {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-column-gap: 12px;
+        button {
+            grid-column-end: span 1;
+        }
+    }
+}

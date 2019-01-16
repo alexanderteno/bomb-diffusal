@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
-import './Memory.css'
 import Button from '@material-ui/core/Button';
+import BaseModule from '../../BaseModule/BaseModule';
+import './Memory.scss'
+
+import memory from '../images/on-the-subject-of-memory.svg';
 
 const POSITION_WORDS = {
     1: 'first',
@@ -140,28 +142,34 @@ class Memory extends Component {
 
     render() {
         return (
-            <div className="header memory">
-                <h1><HomeButton /> On the Subject of Memory</h1>
-                <h2>Stage {this.state.stage}</h2>
-                {this.state.stage === 6 && (<div className="complete">Complete!</div>)}
+            <BaseModule title="Memory" reset={this.reset} thumbnail={memory}>
                 {
-                    this.state.stage < 6 ? (
-                        !this.state.display ? (
-                            <div className="display">
-                                <h3>Display:</h3>
-                                <Buttons onClick={this.processDisplay} />
-                            </div>
-                        ) : (
-                                <div className="seek">
-                                    <div className="instruction">{this.state.instruction}</div>
-                                    <h3>{this.seek()}</h3>
-                                    <Buttons onClick={this.processInput} />
-                                </div>
-                            )
-                    ) : null
+                    (this.state.stage <= 5) ? (
+                        <div className="memory-content">
+                            <h2>Stage {this.state.stage}</h2>
+                            {
+
+                                !this.state.display ? (
+                                    <div className="display">
+                                        <h3>What does the display say?</h3>
+                                        <Buttons onClick={this.processDisplay} />
+                                    </div>
+                                ) : (
+                                        <div className="seek">
+                                            <h3>Response with...</h3>
+                                            <div className="instruction">{this.state.instruction}</div>
+                                            <h3>{this.seek()}</h3>
+                                            <Buttons onClick={this.processInput} />
+                                        </div>
+                                    )
+
+                            }
+                        </div>
+                    ) : (
+                            <div className="module-complete">Complete, please reset.</div>
+                        )
                 }
-                <Button onClick={this.resetState}>Reset</Button>
-            </div>
+            </BaseModule>
         )
     }
 }

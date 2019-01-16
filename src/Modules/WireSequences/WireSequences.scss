@@ -1,0 +1,20 @@
+.wire-sequences {
+    .wire-table {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        .cell {
+            width: 85px;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            grid-column-end: span 1;
+            padding: 5px 4px;
+            &.header {
+                font-weight: bold;
+            }
+            user-select: none;
+        }
+    }
+}

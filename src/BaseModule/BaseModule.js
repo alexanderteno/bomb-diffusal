@@ -13,7 +13,7 @@ const HomeButton = withRouter(({ history }) => (
 ))
 
 const processTitle = (title) => {
-    return title.toLowerCase().replace(' ', '-');
+    return title.toLowerCase().split('\'').join('').split(' ').join('-');
 }
 
 class BaseModule extends Component {

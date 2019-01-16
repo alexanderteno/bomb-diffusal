@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
 import TextField from '@material-ui/core/TextField';
+import BaseModule from '../../BaseModule/BaseModule';
+
+import morseCode from '../images/on-the-subject-of-morse-code.svg';
 
 const WORDS = [
     { word: 'shell', frequency: '3.505' },
@@ -57,47 +59,58 @@ const MORSE_CODE_TO_LETTER = Object.keys(LETTER_TO_MORSE_CODE).reduce((acc, lett
     };
 }, {})
 
+const defaultState = {
+    letters: '',
+};
+
 class MorseCode extends Component {
 
-    state = {
-        letters: '',
+    state = defaultState;
+    textField;
+
+    reset = () => {
+        this.textField.value = '';
+        this.setState(defaultState)
     }
 
-    onChange = (event) => {
+    handleChange = (event) => {
         const inputs = event.currentTarget.value.split(' ');
         this.setState({ letters: inputs.map((input) => MORSE_CODE_TO_LETTER[input]).join('') });
     }
 
     render() {
 
-        const availableWords = WORDS.filter(({ word, _ }) => word.indexOf(this.state.letters) >= 0);
+        const availableWords = WORDS.filter(({ word }) => word.indexOf(this.state.letters) >= 0);
 
         return (
-            <div className="header morse-code">
-                <h1><HomeButton /> On the Subject of More Code</h1>
-                <h2>Please enter dots and dashs with characters separated by a space</h2>
-                <TextField onChange={this.onChange} />
-                <div className="current-letters">{this.state.letters}</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>If the word is:</th>
-                            <th>Respond at frequency:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            availableWords.map(({ word, frequency }) => (
-                                <tr key={word}>
-                                    <td>{word}</td>
-                                    <td>{frequency}</td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </div>
-        )
+            <BaseModule title="Morse Code" reset={this.reset} thumbnail={morseCode}>
+                <h2>Instruction</h2>
+                <p>Enter dots and dashes separated by spaces.</p>
+                <TextField
+                    label="Morse Code"
+                    onChange={this.handleChange}
+                    inputRef={(textField) => this.textField = textField}
+                />
+
+                {
+                    this.state.letters && (
+                        <div className="current-input">
+                            <h2>Current Input</h2>
+                            <div className="current-letters">{this.state.letters}</div>
+                        </div>
+
+                    )
+                }
+                {
+                    (availableWords.length === 1) && (
+                        <div className="response-with">
+                            <h2>Respond with...</h2>
+                            <p>Frequency: <strong>{availableWords[0].frequency}</strong></p>
+                        </div>
+                    )
+                }
+            </BaseModule>
+        );
     }
 }
 

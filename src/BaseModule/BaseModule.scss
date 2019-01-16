@@ -5,6 +5,11 @@
     box-shadow: 1px 1px 8px rgba(black, 0.8);
     border-radius: 4px;
     margin-bottom: 20px;
+    &.sticky {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
     .header {
         padding: 20px;
         display: flex;

@@ -65,7 +65,7 @@ class WireSequences extends Component {
                                 </div>
                             )
                         }),
-                        COLORS.map((color) => (<div key={color} className="cell header">{color}</div>)),
+                        COLORS.map((color) => (<div key={color} className={`cell header ${color}`}>{color}</div>)),
                         COLORS.map((color) => (<div key={color} className="cell connection">{WIRE_SEQUENCES[color][this.state[color]]}</div>)),
                         COLORS.map((color) => {
                             const disabled = this.state[color] >= (WIRE_SEQUENCES[color].length - 1);

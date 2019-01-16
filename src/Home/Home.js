@@ -29,7 +29,15 @@ const suggestions = [
 ]
 
 const ModuleLink = withRouter(({ history, label, to, thumbnail }) => (
-    <div className="module-link" onClick={() => { history.push(to) }}>
+    <div
+        className="module-link"
+        onClick={() => { history.push(to) }}
+        onKeyPress={(keyEvent) => {
+            if (keyEvent.key === 'Enter') {
+                history.push(to);
+            }
+        }}
+    >
         <img className="thumbnail" src={thumbnail} alt={label} />
         <div className="label">{label}</div>
     </div>
@@ -37,18 +45,18 @@ const ModuleLink = withRouter(({ history, label, to, thumbnail }) => (
 
 class Home extends Component {
 
-    handleChange = (value) => {
-        console.log(value);
-    }
-
     render() {
         return (
             <div className="home">
                 <h1>Select a Module:</h1>
                 <div className="module-list">
                     {
-                        suggestions.map((suggestion) => (
-                            <ModuleLink key={suggestion.to} {...suggestion} />
+                        suggestions.map((suggestion, index) => (
+                            <ModuleLink
+                                {...suggestion}
+                                tabIndex={index}
+                                key={suggestion.to}
+                            />
                         ))
                     }
                 </div>

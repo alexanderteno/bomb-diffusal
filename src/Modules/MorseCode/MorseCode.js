@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import BaseModule from '../../BaseModule/BaseModule';
+import './MorseCode.scss';
 
 import morseCode from '../images/on-the-subject-of-morse-code.svg';
 
@@ -84,6 +85,14 @@ class MorseCode extends Component {
 
         return (
             <BaseModule title="Morse Code" reset={this.reset} thumbnail={morseCode}>
+                {
+                    (availableWords.length === 1) && (
+                        <div className="response-with">
+                            <h2>Respond with...</h2>
+                            <p>Frequency: <strong>{availableWords[0].frequency}</strong></p>
+                        </div>
+                    )
+                }
                 <h2>Instruction</h2>
                 <p>Enter dots and dashes separated by spaces.</p>
                 <TextField
@@ -101,14 +110,20 @@ class MorseCode extends Component {
 
                     )
                 }
-                {
-                    (availableWords.length === 1) && (
-                        <div className="response-with">
-                            <h2>Respond with...</h2>
-                            <p>Frequency: <strong>{availableWords[0].frequency}</strong></p>
-                        </div>
-                    )
-                }
+
+                <div className="possible-words">
+                    <h2>Available Words</h2>
+                    <div className="word-list">
+                        <div className="cell header">If the<br />word is:</div>
+                        <div className="cell header">Respond<br />at<br />frequency:</div>
+                        {
+                            availableWords.map(({ word, frequency }) => ([
+                                (<div className="cell word" key={word}>{word}</div>),
+                                (<div className="cell frequency" key={frequency}>{frequency} MHz</div>),
+                            ]))
+                        }
+                    </div>
+                </div>
             </BaseModule>
         );
     }

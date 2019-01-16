@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
 import { TextField } from '@material-ui/core';
-import './Passwords.css';
+import BaseModule from '../../BaseModule/BaseModule';
+import './Passwords.scss';
+
+import passwords from '../images/on-the-subject-of-passwords.svg';
 
 const PASSWORDS = [
     'about',
@@ -41,6 +43,8 @@ const PASSWORDS = [
     'write',
 ]
 
+const DIALS = [0, 1, 2, 3, 4];
+
 const defaultState = {
     dials: [
         [],
@@ -55,6 +59,10 @@ class Passwords extends Component {
 
     state = defaultState;
     _textFields = [undefined, undefined, undefined, undefined, undefined, undefined];
+
+    reset = () => {
+        this.setState(defaultState);
+    }
 
     handleKeyPress = (index) => {
         return (event) => {
@@ -82,34 +90,41 @@ class Passwords extends Component {
                 const currentDial = this.state.dials[i];
                 return currentDial.length === 0 ? true : currentDial.includes(char);
             })
-        })
-
-        console.log({ possiblePasswords });
+        });
 
         return (
-            <div className="header passwords">
-                <h1><HomeButton /> On the Subject of Passwords</h1>
-                <div className="dials">
-                    {[0, 1, 2, 3, 4].map((index) => (
-                        <div className='dial' key={index}>
-                            <TextField onKeyUp={this.handleKeyPress(index)} inputRef={(input) => this._textFields[index] = input} />
-                            {
-                                this.state.dials[index].map((letter, index) => (
-                                    <div className="letter-list" key={index}>{letter}</div>
-                                ))
-                            }
-                        </div>
-                    ))}
-                </div>
-                <div className="possible-passwords">
-                    <h2>Possible Passwords</h2>
+            <BaseModule title="Passwords" reset={this.reset} thumbnail={passwords}>
+
+                <div className="dial-grid">
+                    <h2 className="dials-label row label">Dials</h2>
+                    {
+                        DIALS.map((index) => (
+                            <div className='dial cell' key={index}>
+                                <TextField
+                                    onKeyUp={this.handleKeyPress(index)}
+                                    inputRef={(input) => this._textFields[index] = input}
+                                    label={`Dial ${index + 1}`}
+                                    disabled={this.state.dials[index].length >= 6}
+                                    inputProps={{style: {textAlign: 'center'}}}
+                                />
+                            </div>
+                        ))
+                    }
+                    {
+                        [0, 1, 2, 3, 4, 5].map((row) => {
+                            return DIALS.map((index) => (
+                                <div className="cell dial-letter">{this.state.dials[index][row] || '-'}</div>
+                            ))
+                        })
+                    }
+                    <h2 className="possible-passwords-label row label">Possible Passwords</h2>
                     {
                         possiblePasswords.map((password) => (
                             <div className="possible-password" key={password}>{password}</div>
                         ))
                     }
                 </div>
-            </div>
+            </BaseModule>
         )
     }
 }

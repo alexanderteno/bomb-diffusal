@@ -1,0 +1,19 @@
+.morse-code {
+    .word-list {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        .cell {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            grid-column-end: span 1;
+            padding: 5px 10px;
+            border: 1px solid black;
+            &.header {
+                grid-column-end: span 2;
+                font-weight: bold;
+            }
+        }
+    }
+}

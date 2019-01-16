@@ -176,7 +176,7 @@ class WhosOnFirst extends Component {
                             <div className="response-options">
                                 {
                                     LABELS[this.state.label].split(/,\s/).map((word) => (
-                                        <Button key={word} variant="outlined">{word}</Button>
+                                        <Button key={word}>{word}</Button>
                                     ))
                                 }
                             </div>

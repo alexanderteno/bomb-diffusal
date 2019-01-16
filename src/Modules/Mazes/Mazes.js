@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import HomeButton from '../HomeButton/HomeButton';
-import './Mazes.css';
-import { Button } from '@material-ui/core';
+import BaseModule from '../../BaseModule/BaseModule';
+import './Mazes.scss';
+
+import mazes from '../images/on-the-subject-of-mazes.svg';
 
 const MAZES = [
     {
@@ -191,25 +192,34 @@ class Mazes extends Component {
         const activeMaze = validMazes.length === 1 ? validMazes[0] : undefined;
 
         return (
-            <div className="header mazes">
-                <h1><HomeButton /> On the Subject of Mazes</h1>
-                <table>
-                    <tbody>
-                        {
-                            [0, 1, 2, 3, 4, 5].map((j) => (
-                                <tr key={j}>
-                                    {
-                                        [0, 1, 2, 3, 4, 5].map((i) => (
-                                            <td key={i} onClick={() => this.calibrate(i, 5 - j)} className={`${this.isCalibrationPoint(i, 5 - j) ? 'calibration-point' : ''} ${this.getBorderClasses(activeMaze, i, 5 - j)}`}>○</td>
-                                        ))
-                                    }
-                                </tr>
+            <BaseModule title="Mazes" reset={this.reset} thumbnail={mazes}>
+                <h2>Maze</h2>
+                <div className="maze">
+                    {
+                        [0, 1, 2, 3, 4, 5].map((j) => {
+                            return [0, 1, 2, 3, 4, 5].map((i) => (
+                                <div
+                                    key={`${i}-${j}`}
+                                    onClick={() => this.calibrate(i, 5 - j)}
+                                    className={`cell ${this.getBorderClasses(activeMaze, i, 5 - j)} ${this.isCalibrationPoint(i, 5 - j) ? 'calibration-point' : ''}`}
+                                >
+                                    ○
+                                </div>
                             ))
-                        }
-                    </tbody>
-                </table>
-                <Button onClick={this.reset}>Reset</Button>
-            </div>
+                        })
+                    }
+                </div>
+                {
+                    (this.state.calibrationPoints.length < 2) && (
+                        <div className="instruction">
+                            <h2>Instruction</h2>
+                            <p>Select calibration points.</p>
+                        </div>
+
+                    )
+                }
+
+            </BaseModule>
         )
     }
 }

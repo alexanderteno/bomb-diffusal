@@ -10,7 +10,7 @@ import NumberOfBatteries from './Widgets/NumberOfBatteries';
 import NumberOfStrikes from './Widgets/NumberOfStrikes';
 import ParallelPort from './Widgets/ParallelPort';
 /* Needy Modules */
-import Knobs from './NeedyModules/Knobs';
+import Knobs from './NeedyModules/Knobs/Knobs';
 /* Modules */
 import Home from './Home/Home';
 import Wires from './Modules/Wires/Wires';
@@ -22,8 +22,8 @@ import Memory from './Modules/Memory/Memory';
 import MorseCode from './Modules/MorseCode/MorseCode';
 import ComplicatedWires from './Modules/ComplicatedWires/ComplicatedWires';
 import WireSequences from './Modules/WireSequences/WireSequences';
-import Mazes from './Modules/Mazes';
-import Passwords from './Modules/Passwords';
+import Mazes from './Modules/Mazes/Mazes';
+import Passwords from './Modules/Passwords/Passwords';
 import './App.scss';
 
 const defaultState = {

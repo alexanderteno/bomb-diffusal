@@ -1,0 +1,25 @@
+.knobs {
+    .leds {
+        display: inline-grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-column-gap: 5px;
+        grid-row-gap: 5px;
+        width: 400px;
+        .cell {
+            grid-column-end: span 1;
+        }
+    }
+    .current-configuration {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        .cell {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            padding: 14px;
+        }
+    }
+}

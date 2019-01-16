@@ -1,13 +1,42 @@
 .simon-says {
-    .questions-container {
+    .simon-says-panel {
+        height: 280px;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-
-        .question {
-            flex: 1 1 0;
+        .simon-says-buttons {
+            display: inline-grid;
+            grid-template-columns: 1fr 1fr;
+            transform: rotate(-45deg);
         }
     }
-    
+    .response-buttons {
+        display: inline-grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        grid-column-gap: 3px;
+        grid-row-gap: 3px;
+    }
+    .button {
+        height: 80px;
+        width: 80px;
+        cursor: pointer;
+        border: 1px solid black;
+        &.red {
+            background-color: red;
+        }
+        &.blue {
+            background-color: blue;
+        }
+        &.green {
+            background-color: green;
+        }
+        &.yellow {
+            background-color: yellow;
+        }
+        &.small {
+            height: 10px;
+            width: 10px;
+        }
+    }
 }

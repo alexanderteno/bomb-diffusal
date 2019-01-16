@@ -1,22 +1,39 @@
 import React, { Component } from 'react';
-import Knobs from './NeedyModules/Knobs';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import SerialNumberEven from './BombWidgets/SerialNumberEven';
+import { Button } from '@material-ui/core';
+/* Bomb Information */
+import SerialNumberEven from './Widgets/SerialNumberEven';
+import SerialNumberVowel from './Widgets/SerialNumberVowel';
 import LitIndicatorCAR from './Widgets/LitIndicatorCAR';
 import LitIndicatorFRK from './Widgets/LitIndicatorFRK';
 import NumberOfBatteries from './Widgets/NumberOfBatteries';
+import NumberOfStrikes from './Widgets/NumberOfStrikes';
+import ParallelPort from './Widgets/ParallelPort';
+/* Needy Modules */
+import Knobs from './NeedyModules/Knobs';
+/* Modules */
 import Home from './Home/Home';
 import Wires from './Modules/Wires/Wires';
 import TheButton from './Modules/TheButton/TheButton';
-import './App.scss';
-import { Button } from '@material-ui/core';
 import Keypads from './Modules/Keypads/Keypads';
 import SimonSays from './Modules/SimonSays/SimonSays';
+import WhosOnFirst from './Modules/WhosOnFirst';
+import Memory from './Modules/Memory';
+import MorseCode from './Modules/MorseCode';
+import ComplicatedWires from './Modules/ComplicatedWires/ComplicatedWires';
+import WireSequences from './Modules/WireSequences';
+import Mazes from './Modules/Mazes';
+import Passwords from './Modules/Passwords';
+import './App.scss';
 
 const defaultState = {
   serialNumberEven: undefined,
+  serialNumberVowel: undefined,
   litIndicatorCAR: undefined,
   litIndicatorFRK: undefined,
+  numberOfBatteries: undefined,
+  numberOfStrikes: 0,
+  parallelPort: undefined,
 };
 
 class App extends Component {
@@ -27,9 +44,19 @@ class App extends Component {
     this.setState(defaultState);
   }
 
-  handleSerialNumberChange = (event) => {
+  handleNumberOfStrikes = (event) => {
+    const { value } = event.target;
+    this.setState({ numberOfStrikes: value });
+  }
+
+  handleSerialNumberEven = (event) => {
     const { value } = event.target;
     this.setState({ serialNumberEven: value === 'even' ? true : false });
+  }
+
+  handleSerialNumberVowel = (event) => {
+    const { value } = event.target;
+    this.setState({ serialNumberVowel: value === 'yes' ? true : false });
   }
 
   handleLitIndicatorCARChange = (event) => {
@@ -48,6 +75,11 @@ class App extends Component {
     this.setState({ numberOfBatteries });
   }
 
+  handleParallelPortChange = (event) => {
+    const { value } = event.target;
+    this.setState({ parallelPort: value === 'yes' ? true : false });
+  }
+
   render() {
 
     const props = Object.assign({}, this.state);
@@ -61,10 +93,13 @@ class App extends Component {
             <Button onClick={this.reset}>refresh</Button>
           </div>
           <div className="widgets">
-            <SerialNumberEven value={this.state.lastDigitSerialNumberEven} handleChange={this.handleSerialNumberChange} />
+            <NumberOfStrikes value={this.state.numberOfStrikes} handleChange={this.handleNumberOfStrikes} />
+            <SerialNumberEven value={this.state.lastDigitSerialNumberEven} handleChange={this.handleSerialNumberEven} />
+            <SerialNumberVowel value={this.state.serialNumberVowel} handleChange={this.handleSerialNumberVowel} />
             <LitIndicatorCAR value={this.state.litIndicatorCAR} handleChange={this.handleLitIndicatorCARChange} />
             <LitIndicatorFRK value={this.state.litIndicatorFRK} handleChange={this.handleLitIndicatorFRKChange} />
             <NumberOfBatteries value={this.state.numberOfBatteries} handleChange={this.handleNumberOfBatteriesChange} />
+            <ParallelPort value={this.state.parallelPort} handleChange={this.handleParallelPortChange} />
           </div>
         </div>
         <Router>
@@ -74,13 +109,13 @@ class App extends Component {
             <Route path="/the-button" render={() => (<TheButton {...props} />)} />
             <Route path="/keypads" render={() => (<Keypads {...props} />)} />
             <Route path="/simon-says" render={() => (<SimonSays {...props} />)} />
-            {/* <Route path="/whos-on-first" component={WhosOnFirst} /> */}
-            {/* <Route path="/memory" component={Memory} /> */}
-            {/* <Route path="/morse-code" component={MorseCode} /> */}
-            {/* <Route path="/complicated-wires" component={ComplicatedWires} /> */}
-            {/* <Route path="/wire-sequences" component={WireSequences} /> */}
-            {/* <Route path="/mazes" component={Mazes} /> */}
-            {/* <Route path="/passwords" component={Passwords} /> */}
+            <Route path="/whos-on-first" component={WhosOnFirst} />
+            <Route path="/memory" component={Memory} />
+            <Route path="/morse-code" component={MorseCode} />
+            <Route path="/complicated-wires" render={() => (<ComplicatedWires {...props} />)} />
+            <Route path="/wire-sequences" component={WireSequences} />
+            <Route path="/mazes" component={Mazes} />
+            <Route path="/passwords" component={Passwords} />
           </Switch>
         </Router>
       </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormControl, FormControlLabel, FormLabel, RadioGroup, Radio } from '@material-ui/core';
 
-const SerialNumberEven = ({ value, handleChange }) => (
+const SerialNumberVowel = ({ value, handleChange }) => (
     <FormControl component="fieldset" className="serial-number widget">
-        <FormLabel component="legend">Serial number final digit?</FormLabel>
+        <FormLabel component="legend">Serial Number contains a vowel?</FormLabel>
         <RadioGroup
             aria-label="Serial Number"
             className="radio-group"
@@ -11,10 +11,10 @@ const SerialNumberEven = ({ value, handleChange }) => (
             value={value}
             onChange={handleChange}
         >
-            <FormControlLabel value="even" control={<Radio />} label="Even" />
-            <FormControlLabel value="odd" control={<Radio />} label="Odd" />
+            <FormControlLabel value="yes" control={<Radio />} label="Yes" />
+            <FormControlLabel value="no" control={<Radio />} label="No" />
         </RadioGroup>
     </FormControl>
 )
 
-export default SerialNumberEven;
+export default SerialNumberVowel;

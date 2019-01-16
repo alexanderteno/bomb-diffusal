@@ -1,30 +1,46 @@
 import React, { Component } from 'react';
-import Question from '../../Question/Question';
-import './SimonSays.scss';
 import BaseModule from '../../BaseModule/BaseModule';
+import { Button, Icon } from '@material-ui/core';
+import './SimonSays.scss';
 
 import simonSays from '../images/on-the-subject-of-simon-says.svg';
 
-const VOWEL = 'vowel';
-const NO_VOWEL = 'no-vowel';
+const COLORS = {
+    'red': 0,
+    'blue': 1,
+    'green': 2,
+    'yellow': 3,
+};
 
 const DIRECTIONS = {
-    [VOWEL]: {
-        0: ['Blue', 'Red', 'Yellow', 'Green'],
-        1: ['Yellow', 'Green', 'Blue', 'Red'],
-        2: ['Green', 'Red', 'Yellow', 'Blue'],
+    'vowel': {
+        0: ['blue', 'red', 'yellow', 'green'],
+        1: ['yellow', 'green', 'blue', 'red'],
+        2: ['green', 'red', 'yellow', 'blue'],
     },
-    [NO_VOWEL]: {
-        0: ['Blue', 'Yellow', 'Green', 'Red'],
-        1: ['Red', 'Blue', 'Yellow', 'Green'],
-        2: ['Yellow', 'Green', 'Blue', 'Red'],
+    'no-vowel': {
+        0: ['blue', 'yellow', 'green', 'red'],
+        1: ['red', 'blue', 'yellow', 'green'],
+        2: ['yellow', 'green', 'blue', 'red'],
     }
 }
 
+const SimonSaysPanel = ({ onClick }) => (
+    <div className="simon-says-panel">
+        <div className="simon-says-buttons">
+            <div className="button red" onClick={() => { onClick('red') }}></div>
+            <div className="button blue" onClick={() => { onClick('blue') }}></div>
+            <div className="button green" onClick={() => { onClick('green') }}></div>
+            <div className="button yellow" onClick={() => { onClick('yellow') }}></div>
+        </div>
+    </div>
+)
+
 const defaultState = {
-    instruction: undefined,
-    strikes: undefined,
+    moduleReady: false,
+    buttons: [],
 }
+
 
 class SimonSays extends Component {
 
@@ -34,56 +50,61 @@ class SimonSays extends Component {
         this.setState(defaultState);
     }
 
-    setStrikes = (strikes) => {
-        this.setState({ strikes });
+    readyModule = () => {
+        this.setState({ moduleReady: true });
     }
 
-    setInstruction = (instruction) => {
-        this.setState({ instruction });
+    addButton = (color) => {
+        this.setState((prevState) => {
+            const nextButtons = prevState.buttons.slice(0);
+            nextButtons.push(color);
+            return {
+                ...prevState,
+                buttons: nextButtons,
+            };
+        })
     }
 
     render() {
+        const { serialNumberVowel, numberOfStrikes } = this.props;
         return (
             <BaseModule title="Simon Says" thumbnail={simonSays} reset={this.reset}>
-                <div className="questions-container">
-                    <Question
-                        condition={this.state.instruction === undefined}
-                        question="Does the serial number contains a vowel?"
-                        options={[{ label: "Yes", instruction: VOWEL }, { label: "No", instruction: NO_VOWEL }]}
-                        onChoice={this.setStage}
-                        onInstruction={this.setInstruction}
-                    />
-                    <Question
-                        condition={this.state.strikes === undefined}
-                        question="How many strikes?"
-                        options={[{ label: "No Strikes", value: 0 }, { label: "1 Strike", value: 1 }, { label: "2 Strikes", value: 2 }]}
-                        onChoice={this.setStrikes}
-                        onInstruction={this.setInstruction}
-                    />
-                </div>
                 {
-                    this.state.strikes !== undefined && this.state.instruction !== undefined ?
-                        (
-
-                            <table className="solution-table">
-                                <thead>
-                                    <tr>
-                                        <th>Red Flash</th>
-                                        <th>Blue Flash</th>
-                                        <th>Green Flash</th>
-                                        <th>Yellow Flash</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
+                    this.state.moduleReady ? (
+                        (serialNumberVowel === undefined) && (
+                            <div className="required-information">
+                                <h2>Required Information</h2>
+                                <div className="question">Determine if the serial number contains a vowel.</div>
+                            </div>
+                        )
+                    ) : (
+                            <div className="ready-module">
+                                <p>Please ensure that the number of strikes is correct.</p>
+                                <Button variant="outlined" onClick={this.readyModule}><Icon>checkmark</Icon></Button>
+                            </div>
+                        )
+                }
+                {
+                    (serialNumberVowel !== undefined) ? (
+                        <div className="response">
+                            <SimonSaysPanel onClick={this.addButton} />
+                            {
+                                <div className="instructions">
+                                    <h2>Instructions</h2>
+                                    <div className="response-buttons">
                                         {
-                                            DIRECTIONS[this.state.instruction][this.state.strikes].map((color) => (<td key={color}>{color}</td>))
+                                            this.state.buttons.map((color, index) => {
+                                                const directions = DIRECTIONS[serialNumberVowel ? 'vowel' : 'no-vowel'][numberOfStrikes]
+                                                return (
+                                                    <div key={index} className={`small button ${directions[COLORS[color]]}`}></div>
+                                                )
+                                            })
                                         }
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        ) : null
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    ) : null
                 }
             </BaseModule>
         )

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl, TextField } from '@material-ui/core';
 
-const NumberOfBatteries = ({ value, handleChange }) => (
+const NumberOfBatteries = ({ handleChange }) => (
     <FormControl component="fieldset" className="number-of-batteries widget">
         <TextField
             id="standard-name"

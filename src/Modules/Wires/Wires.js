@@ -53,7 +53,7 @@ const getWireInstruction = (wires, serialNumberEven) => {
             } else if (countWires(wires, 'yellow') > 1) {
                 return 'Cut the last wire.';
             } else {
-                return 'Cut the first wire.'
+                return 'Cut the second wire.'
             }
         case 5:
             if (wires[4] === 'black' && serialNumberEven === undefined) {

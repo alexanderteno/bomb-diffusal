@@ -5,7 +5,7 @@ const NumberOfBatteries = ({ handleChange }) => (
     <FormControl component="fieldset" className="number-of-batteries widget">
         <TextField
             id="standard-name"
-            label="Nuber of Batteries"
+            label="Number of Batteries"
             onChange={handleChange}
             margin="normal"
         />

@@ -57,7 +57,7 @@ const getWireInstruction = (wires, serialNumberEven) => {
             }
         case 5:
             if (wires[4] === 'black' && serialNumberEven === undefined) {
-                return 'Determine if the last digit of the serial nuber is even.';
+                return 'Determine if the last digit of the serial number is even.';
             } else if (wires[4] === 'black' && !serialNumberEven) {
                 return 'Cut the fourth wire.';
             } else if (countWires(wires, 'red') && countWires(wires, 'yellow') > 1) {

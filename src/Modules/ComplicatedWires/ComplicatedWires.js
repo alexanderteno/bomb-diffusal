@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
+import { TextField, Icon } from '@material-ui/core';
 import BaseModule from '../../BaseModule/BaseModule';
 import './ComplicatedWires.scss';
 
@@ -25,115 +25,130 @@ const COMPLICATED_WIRES = {
     '1111': 'D',
 }
 
-const FEATURES = [
-    { label: 'RED', feature: 'redColoring' },
-    { label: 'BLUE', feature: 'blueColoring' },
-    { label: 'STAR', feature: 'hasStar' },
-    { label: 'LIT LED', feature: 'litLED' },
-]
+const RED = 8;
+const BLUE = 4;
+const STAR = 2;
+const LIGHT = 1;
 
-const featuresToBinary = (state) => {
-    const redColoring = state.redColoring ? '1' : '0';
-    const blueColoring = state.blueColoring ? '1' : '0';
-    const hasStar = state.hasStar ? '1' : '0';
-    const litLED = state.litLED ? '1' : '0';
-    return `${redColoring}${blueColoring}${hasStar}${litLED}`;
+const MASK = 8 | 4 | 2 | 1;
+
+const translateWire = (wireDescription) => {
+    const descriptors = wireDescription.toLowerCase().split(' ');
+    const wireValue = descriptors.reduce((acc, descriptor, index) => {
+        const previousDescriptor = descriptors[Math.max(0, index - 1)]
+        const bitMask = (previousDescriptor === 'not') || (previousDescriptor === 'no') ? 0 : MASK;
+        switch (descriptor) {
+            case 'red':
+                return acc | (RED & bitMask);
+            case 'blue':
+                return acc | (BLUE & bitMask);
+            case 'star':
+                return acc | (STAR & bitMask);
+            case 'light':
+            case 'lit':
+                return acc | (LIGHT & bitMask);
+            default:
+                return acc;
+        }
+    }, 0)
+    return wireValue.toString(2).padStart(4, '0');
+}
+
+const getInstruction = (wire, { parallelPort, serialNumberEven, numberOfBatteries }) => {
+    const twoOrMoreBatteries = numberOfBatteries >= 2;
+    const instruction = COMPLICATED_WIRES[wire];
+    console.log({ instruction });
+    switch (instruction) {
+        case 'C':
+            return 'C';
+        case 'D':
+            return 'D';
+        case 'S':
+            return (serialNumberEven === undefined) ? 'S' : (serialNumberEven ? 'C' : 'D');
+        case 'P':
+            return (parallelPort === undefined) ? 'P' : (parallelPort ? 'C' : 'D');
+        case 'B':
+            return (numberOfBatteries === undefined) ? 'B' : (twoOrMoreBatteries ? 'C' : 'D');
+        default:
+            return 'Invalid selection';
+    }
 }
 
 const defaultState = {
-    redColoring: false,
-    blueColoring: false,
-    hasStar: false,
-    litLED: false,
-    binary: '0000',
+    wireDescription: undefined,
+    wires: [],
 };
+
+const WireInstruction = ({ wire, settings }) => {
+    const isRed = wire[0] === '1';
+    const isBlue = wire[1] === '1';
+    const hasStar = wire[2] === '1';
+    const isLit = wire[3] === '1';
+    return (
+        <div className="wire-instruction features">
+            {hasStar && (<div className="feature star"><Icon>star_border</Icon></div>)}
+            {isRed && (<div className="feature red"></div>)}
+            {isBlue && (<div className="feature blue"></div>)}
+            {isLit && (<div className="feature light"><Icon>brightness_low</Icon></div>)}
+            <div className="feature instruction">{getInstruction(wire, settings)}</div>
+        </div>
+    )
+}
 
 class ComplicatedWires extends Component {
 
     state = defaultState;
+    textFieldRef;
 
     reset = () => {
         this.setState(defaultState);
     }
 
-    toggleFeature = (feature) => {
-        return () => {
-            this.setState((prevState) => {
-                const nextState = {
-                    ...prevState,
-                    [feature]: !prevState[feature],
-                }
-                const binary = featuresToBinary(nextState)
-                return {
-                    ...nextState,
-                    binary,
-                };
-            });
-        }
-    }
-
-    toggleBombFeature = (feature) => {
-        return () => {
-            this.setState((prevState) => ({
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.setState((prevState) => {
+            const nextWires = prevState.wires.slice(0);
+            nextWires.push(translateWire(prevState.wireDescription))
+            return {
                 ...prevState,
-                [feature]: !prevState[feature],
-            }));
-        }
+                wires: nextWires,
+            };
+        });
+        this.textFieldRef.value = '';
     }
 
-    getInstruction = ({ parallelPort, serialNumberEven, numberOfBatteries }) => {
-        const twoOrMoreBatteries = numberOfBatteries >= 2;
-        const instruction = COMPLICATED_WIRES[this.state.binary];
-        switch (instruction) {
-            case 'C':
-                return 'Cut the wire';
-            case 'D':
-                return 'Do not cut the wire';
-            case 'S':
-                return (serialNumberEven === undefined) ?
-                    'Cut the wire if the last digit of the serial number is even' :
-                    (serialNumberEven ?
-                        'Cut the wire' :
-                        'Do not cut the wire');
-            case 'P':
-                return (parallelPort === undefined) ?
-                    'Cut the wire if the bomb has a parallel port' :
-                    (parallelPort ?
-                        'Cut the wire' :
-                        'Do not cut the wire');
-            case 'B':
-                return (numberOfBatteries === undefined) ?
-                    'Cut the wire if the bomb has two or more batteries' :
-                    (twoOrMoreBatteries ?
-                        'Cut the wire' :
-                        'Do not cut the wire');
-            default:
-                return 'Invalid selection';
-        }
+    handleChange = (event) => {
+        const { value } = event.target;
+        this.setState({ wireDescription: value });
     }
 
     render() {
         return (
             <BaseModule title="Complicated Wires" thumbnail={complicatedWires} reset={this.reset}>
-                <h2>Wire Details</h2>
-                <FormGroup row className="wire-details">
-                    {
-                        FEATURES.map(({ label, feature }) => (
-                            <FormControlLabel
-                                key={feature}
-                                control={
-                                    <Checkbox
-                                        checked={this.state[feature]}
-                                        onChange={this.toggleFeature(feature)}
-                                    />
+                <h2>Describe the wire</h2>
+                <form className="wire-form" noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+                    <TextField
+                        id="wire-detail-input"
+                        label="Wire Details"
+                        onChange={this.handleChange}
+                        inputRef={(textFieldRef) => { this.textFieldRef = textFieldRef }}
+                    />
+                </form>
+                {
+                    (this.state.wires.length > 0) && (
+                        <div className="wire-solution">
+                            <h2>Respond with...</h2>
+                            <p>In order from left to right</p>
+                            <div className="solution-grid">
+                                {
+                                    this.state.wires.map((wire, index) => (
+                                        <WireInstruction key={index} wire={wire} settings={this.props} />
+                                    ))
                                 }
-                                label={label}
-                            />
-                        ))
-                    }
-                </FormGroup>
-                <h2>Instruction</h2>
-                <div className="instruction">{this.getInstruction(this.props)}</div>
+                            </div>
+                        </div>
+                    )
+                }
             </BaseModule >
         )
     }

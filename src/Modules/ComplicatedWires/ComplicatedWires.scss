@@ -1,8 +1,56 @@
 .complicated-wires {
-    .wire-details {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+    .wire-solution {
+        .solution-grid {
+            box-shadow: 0 0 4px rgba(black, 0.2);
+            padding: 10px;
+            display: inline-grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-column-gap: 4px;
+            background-color: rgba(black, 0.1);
+            .features {
+                grid-column-end: span 1;
+                display: inline-grid;
+                grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+                grid-row-gap: 4px;
+                background-color: white;
+                padding: 3px;
+                .feature {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 28px;
+                    width: 28px;
+                    &:not(.instruction) {
+                        border-radius: 50%;
+                        border: 1px solid rgba(black, 0.5);
+                        box-sizing: border-box;
+                    }
+                }
+                .light {
+                    grid-row: 1 / span 1;
+                }
+                .red {
+                    background-color: red;
+                    grid-row: 2 / span 1;
+                }
+                .blue {
+                    background-color: blue;
+                    grid-row: 3 / span 1;
+                }
+                .blue,
+                .red {
+                    border: 4px solid white;
+                    box-sizing: border-box;
+                }
+                .star {
+                    grid-row: 4 / span 1;
+                }
+                .instruction {
+                    grid-row: 5 / span 1;
+                    border-top: 1px solid rgba(black, 0.2);
+                }
+            }
+        }
     }
 }

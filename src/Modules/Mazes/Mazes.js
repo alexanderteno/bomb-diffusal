@@ -152,10 +152,16 @@ class Mazes extends Component {
         });
     }
 
-    calibrate = (x, y) => {
+    toggleCalibrationPoint = (x, y) => {
+
+        const calibrationPointIndex = this.findCalibrationPoint(x, y);
         this.setState((prevState) => {
             const calibrationPoints = prevState.calibrationPoints.slice(0);
-            calibrationPoints.push({ x, y });
+            if (calibrationPointIndex >= 0) {
+                calibrationPoints.splice(calibrationPointIndex, 1);
+            } else {
+                calibrationPoints.push({ x, y });
+            }
             return {
                 ...prevState,
                 calibrationPoints,
@@ -163,8 +169,8 @@ class Mazes extends Component {
         })
     }
 
-    isCalibrationPoint = (x, y) => {
-        return this.state.calibrationPoints.some((calibrationPoint) => calibrationPoint.x === x && calibrationPoint.y === y);
+    findCalibrationPoint = (x, y) => {
+        return this.state.calibrationPoints.findIndex((calibrationPoint) => calibrationPoint.x === x && calibrationPoint.y === y);
     }
 
     getBorderClasses = (activeMaze, x, y) => {
@@ -200,8 +206,8 @@ class Mazes extends Component {
                             return [0, 1, 2, 3, 4, 5].map((i) => (
                                 <div
                                     key={`${i}-${j}`}
-                                    onClick={() => this.calibrate(i, 5 - j)}
-                                    className={`cell ${this.getBorderClasses(activeMaze, i, 5 - j)} ${this.isCalibrationPoint(i, 5 - j) ? 'calibration-point' : ''}`}
+                                    onClick={() => this.toggleCalibrationPoint(i, 5 - j)}
+                                    className={`cell ${this.getBorderClasses(activeMaze, i, 5 - j)} ${this.findCalibrationPoint(i, 5 - j) >= 0 ? 'calibration-point' : ''}`}
                                 >
                                     ○
                                 </div>
